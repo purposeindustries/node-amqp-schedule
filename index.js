@@ -1,12 +1,13 @@
 module.exports = function scheduler(conn, opt) {
   opt = opt || {};
-  opt.prefix = opt.prefix || 'schedule.';
+  opt.separator = opt.separator || '.';
+  opt.prefix = opt.prefix || 'schedule';
   opt.threshold = opt.threshold || 10000;
   return function publish(exchange, route, message, delay, options, fn) {
     if(delay instanceof Date) {
       delay = delay.getTime() - Date.now();
     }
-    var name = opt.prefix + delay;
+    var name = opt.prefix + opt.separator + [exchange, route, delay].join(opt.separator);
     var queue = conn.queue(name, {
       durable: true,
       autoDelete: true,
