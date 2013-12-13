@@ -3,10 +3,12 @@ module.exports = function scheduler(conn, opt) {
   opt.separator = opt.separator || '.';
   opt.prefix = opt.prefix || 'schedule';
   opt.threshold = opt.threshold || 10000;
+  opt.round = opt.round || 1000;
   return function publish(exchange, route, message, delay, options, fn) {
     if(delay instanceof Date) {
       delay = delay.getTime() - Date.now();
     }
+    delay = Math.round(delay/opt.round)*opt.round;
     var name = opt.prefix + opt.separator + [exchange, route, delay].join(opt.separator);
     var queue = conn.queue(name, {
       durable: true,
