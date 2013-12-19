@@ -1,6 +1,6 @@
 {
   "name": "amqp-schedule",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Schedule jobs with `amqp`",
   "main": "index.js",
   "author": "Purpose Industries <dev@purposeindustries.co>",
