@@ -1,3 +1,5 @@
+var maxPossibleDelay = Math.pow(2,32) - 1;
+
 module.exports = function scheduler(conn, opt) {
   opt = opt || {};
   opt.separator = opt.separator || '.';
@@ -8,6 +10,11 @@ module.exports = function scheduler(conn, opt) {
     if(delay instanceof Date) {
       delay = delay.getTime() - Date.now();
     }
+
+    if (delay + opt.threshold > maxPossibleDelay) {
+        delay = maxPossibleDelay - opt.threshold;
+    }
+
     delay = Math.round(delay/opt.round)*opt.round;
     var ttl = delay;
     var time = { ms: 1000, s: 60, m: 60, h: 24, d: 30, mo: 12, y: 999999 };
