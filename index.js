@@ -1,4 +1,4 @@
-var maxPossibleDelay = Math.pow(2,32) - 1;
+var maxPossibleDelay = Math.pow(2,30) - 1;
 
 module.exports = function scheduler(conn, opt, exchange) {
     opt = opt || {};
