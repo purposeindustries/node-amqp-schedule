@@ -8,7 +8,7 @@ module.exports = function scheduler(conn, opt, exchange) {
     opt.round = opt.round || 1000;
 
     return function publish(exchangeName, route, message, delay, options, fn) {
-        if(delay instanceof Date) {
+        if (delay instanceof Date) {
             delay = delay.getTime() - Date.now();
         }
 
@@ -22,13 +22,16 @@ module.exports = function scheduler(conn, opt, exchange) {
             time = { ms: 1000, s: 60, m: 60, h: 24, d: 30, mo: 12, y: 999999 };
 
         delay = Object.keys(time).map(function(unit, i, keys) {
-            var mod = delay%time[unit];
+            var mod = delay % time[unit];
             delay = Math.floor(delay/time[unit]);
             return mod ? mod + unit : '';
         }).reverse().join('');
 
-        var name = opt.prefix + opt.separator + [exchangeName, route, delay].join(opt.separator),
-            queue = conn.queue(name, {
+        var name = opt.prefix + opt.separator + [exchangeName, route, delay].join(opt.separator);
+
+        console.log("create queue %s with delay", name);
+
+        var queue = conn.queue(name, {
                 durable: true,
                 autoDelete: true,
                 arguments: {
