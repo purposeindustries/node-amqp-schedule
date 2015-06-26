@@ -5,7 +5,7 @@ module.exports = function scheduler(conn, opt, exchange) {
     opt.separator = opt.separator || '.';
     opt.prefix = opt.prefix || 'schedule';
     opt.threshold = opt.threshold || 10000;
-    opt.round = opt.round || 1000;
+    opt.round = opt.round || 50;
 
     return function publish(exchangeName, route, message, delay, options, fn) {
         if (delay instanceof Date) {
@@ -28,8 +28,6 @@ module.exports = function scheduler(conn, opt, exchange) {
         }).reverse().join('');
 
         var name = opt.prefix + opt.separator + [exchangeName, route, delay].join(opt.separator);
-
-        console.log("create queue %s with delay", name);
 
         var queue = conn.queue(name, {
                 durable: true,
